@@ -1,0 +1,2355 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>Exceptional Ruby</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2011-02-04 09:19:08 EST"/>
+<meta name="author" content="Avdi Grimm (@avdi / avdi.org)"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<!-- configuration parameters --> <meta name='defaultView' content='slideshow' /> <meta name='controlVis' content='hidden' /> <!-- style sheet links --> <link rel='stylesheet' href='ui/default/slides.css' type='text/css' media='projection' id='slideProj' /> <link rel='stylesheet' href='ui/default/outline.css' type='text/css' media='screen' id='outlineStyle' /> <link rel='stylesheet' href='ui/default/print.css' type='text/css' media='print' id='slidePrint' /> <link rel='stylesheet' href='ui/default/opera.css' type='text/css' media='projection' id='operaFix' /><!-- S5 JS --> <script src='ui/jquery.js' type='text/javascript'></script> <script src='ui/org-slides.js' type='text/javascript'></script> <script src='ui/default/slides.js' type='text/javascript'></script> <script src='ui/default/style.js' type='text/javascript'></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+<div id="content">
+
+<div class='layout'>
+<div id='controls'></div>
+<div id='currentSlide'></div>
+<div id='header'></div>
+<div id='footer'></div>
+</div>
+<div class='presentation'>
+<div class='slide front'>
+  <div id='front-logo'></div>
+<h1 class='front'>Exceptional Ruby</h1><h3>Avdi Grimm (@avdi / avdi.org)</h3></div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Happy Birthday Josh! </h2>
+<div class="outline-text-2" id="text-1">
+
+<p><img src="josh.jpg"  alt="josh.jpg" />
+</p></div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">About this Talk </h2>
+<div class="outline-text-2" id="text-2">
+
+<p>By the end of this talk you should:
+</p><ul>
+<li id="sec-2_1">Understand the mechanics of Ruby failure handling <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2_2">Be able to architect a robust failure handling strategy <br/>
+For apps <i>or</i> libraries.
+</li>
+</ul>
+<ul>
+<li id="sec-2_3">Be exceptionally bored <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">Definitions </h2>
+<div class="outline-text-2" id="text-3">
+
+<ul>
+<li id="sec-3_1">This talk is about <b>failure</b> <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-3_2"><b>Exceptions</b> are how we signal failures <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-3_3">Failures are often caused by <b>errors</b> <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-3_4">So what is a failure? <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">Every method has a contract </h2>
+<div class="outline-text-2" id="text-4">
+
+<ul>
+<li id="sec-4_1">Bertrand Meyer, Design by Contract <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-4_2">Ruby's exception system influenced by Eiffel <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-4_3">Preconditions and postconditions <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-4_4">Either implicit or explicit <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">The Definition of Failure </h2>
+<div class="outline-text-2" id="text-5">
+
+<p>A failure occurs when code is unable to fulfill its contract.
+</p><ul>
+<li id="sec-5_1">A mistake in usage <br/>
+
+
+
+<pre class="src src-ruby"><span style="color: #228b22;">User</span>.find(<span style="color: #a0522d;">nil</span>)
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-5_2">A mistake in the code <br/>
+
+
+
+<pre class="src src-ruby">h = {<span style="color: #008b8b;">:count</span> =&gt; 42}; h[<span style="color: #8b2252;">"count"</span>] += 1
+</pre>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6">The Definition of Failure cont'd </h2>
+<div class="outline-text-2" id="text-6">
+
+<ul>
+<li id="sec-6_1">An unexpected case <br/>
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">case</span> message_type
+<span style="color: #a020f0;">when</span> <span style="color: #8b2252;">"success"</span> <span style="color: #a020f0;">then</span> <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">when</span> <span style="color: #8b2252;">"failure"</span> <span style="color: #a020f0;">then</span> <span style="color: #b22222;"># </span><span style="color: #b22222;">....
+</span><span style="color: #a020f0;">else</span> <span style="color: #b22222;"># </span><span style="color: #b22222;">uh oh...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-6_2">Failure of an external element <br/>
+
+
+
+<pre class="src src-ruby"><span style="color: #228b22;">HTTP</span>.get_response(url).code <span style="color: #b22222;"># </span><span style="color: #b22222;">=&gt; 500
+</span></pre>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7">Lifecycle of an Exception </h2>
+<div class="outline-text-2" id="text-7">
+
+<blockquote>
+
+<p>In some cases it may not be acceptable to know that a failure will lead to
+termination and a message. You may want to take control.
+&ndash; <i>Object Oriented Software Construction</i>
+</p>
+</blockquote>
+
+
+<blockquote>
+
+<p>If code in one routine encounters an unexpected condition that it doesn't know
+how to handle, it throws an exception, essentially throwing up its hands and
+yelling "I don't know what to do about this&ndash;I sure hope somebody else knows how
+to handle it!"  &ndash; <i>Code Complete</i>
+</p>
+</blockquote>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8">Raising Exceptions </h2>
+<div class="outline-text-2" id="text-8">
+
+<p><img src="batman-small.jpg"  alt="batman-small.jpg" />
+</p></div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><code>raise</code> (or <code>fail</code>) </h2>
+<div class="outline-text-2" id="text-9">
+
+<ul>
+<li id="sec-9_1">Every exception starts with a <code>raise</code> (or <code>fail</code>) <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-9_2">Which to use? <br/>
+<blockquote>
+
+<p>I almost always use the "fail" keyword&hellip; the only time I use "raise" is when I
+am catching an exception and re-reaising it, because here I'm <b>not</b> failing, but
+explicitly and purposefully raising an exception.
+&ndash; Jim Weirich
+</p>
+</blockquote>
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+ <span style="color: #a020f0;">fail</span> <span style="color: #8b2252;">"Oops"</span>; 
+<span style="color: #a020f0;">rescue</span> =&gt; error
+  <span style="color: #a020f0;">raise</span> <span style="color: #a020f0;">if</span> error.message != <span style="color: #8b2252;">"Oops"</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><code>raise</code> with no arguments </h2>
+<div class="outline-text-2" id="text-10">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">raise</span>
+</pre>
+
+
+<p>
+&hellip; is equivalent to:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">raise</span> <span style="color: #228b22;">RuntimeError</span>
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><code>raise</code> with a string </h2>
+<div class="outline-text-2" id="text-11">
+
+<p>Raises a <code>RuntimeError</code> with the string as its message.
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Doh!"</span>
+</pre>
+
+
+<p>
+&hellip; is equivalent to:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">raise</span> <span style="color: #228b22;">RuntimeError</span>, <span style="color: #8b2252;">"Doh!"</span>
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><code>raise</code> with an error class </h2>
+<div class="outline-text-2" id="text-12">
+
+<p>Raises an object of the specified class.
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">raise</span> <span style="color: #228b22;">ArgumentError</span>, <span style="color: #8b2252;">"Doh!"</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-13" class="outline-2">
+<h2 id="sec-13"><code>raise</code> with a custom backtrace </h2>
+<div class="outline-text-2" id="text-13">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">assert</span>(value)
+  <span style="color: #a020f0;">raise</span>(<span style="color: #228b22;">RuntimeError</span>, <span style="color: #8b2252;">"Doh!"</span>, caller) <span style="color: #a020f0;">unless</span> value
+<span style="color: #a020f0;">end</span>
+assert(4 == 5)
+</pre>
+
+
+<p>
+&hellip;results in:
+</p><pre class="example">
+set_backtrace.rb:4: Failed (RuntimeError)
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-14" class="outline-2">
+<h2 id="sec-14"><code>raise</code> is a method on Kernel </h2>
+<div class="outline-text-2" id="text-14">
+
+<p>A method, not a keyword.
+</p>
+<p>
+This means we can override it!
+</p></div>
+
+</div>
+
+<div id="outline-container-15" class="outline-2">
+<h2 id="sec-15">Overriding <code>raise</code> </h2>
+<div class="outline-text-2" id="text-15">
+
+<p>Make exceptions instantly fatal:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">module</span> <span style="color: #228b22;">RaiseExit</span>
+  <span style="color: #a020f0;">def</span> <span style="color: #0000ff;">raise</span>(msg_or_exc, msg=msg_or_exc, trace=caller)
+    warn msg.to_s
+    exit! 1
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+
+<span style="color: #a020f0;">module</span> <span style="color: #228b22;">Kernel</span>
+  include <span style="color: #228b22;">RaiseExit</span>
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+<ul>
+<li id="sec-15_1">Note: No override in C extensions <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-16" class="outline-2">
+<h2 id="sec-16">Hammertime </h2>
+<div class="outline-text-2" id="text-16">
+
+<p>An error console for ruby:
+<a href="http://github.com/avdi/hammertime">http://github.com/avdi/hammertime</a>
+</p>
+
+
+<pre class="src src-ruby">require <span style="color: #8b2252;">'hammertime'</span>
+<span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Oh no!"</span>
+</pre>
+
+
+
+<pre class="example">=== Stop! Hammertime. ===
+    An error has occurred at example.rb:2:in `raise_runtime_error'
+    The error is: #&lt;RuntimeError: Oh no!&gt;
+    1. Continue (process the exception normally)
+    2. Ignore (proceed without raising an exception)
+    3. Permit by type (don't ask about future errors of this type)
+    4. Permit by line (don't ask about future errors raised from this point)
+    5. Backtrace (show the call stack leading up to the error)
+    6. Debug (start a debugger)
+    7. Console (start an IRB session)
+    What now?
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-17" class="outline-2">
+<h2 id="sec-17"><code>raise</code> internals </h2>
+<div class="outline-text-2" id="text-17">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">raise</span> <span style="color: #228b22;">SomeError</span>, <span style="color: #8b2252;">"Bad stuff"</span>
+</pre>
+
+
+
+<ol>
+<li>
+Call <code>#exception()</code> to get the exception.
+</li>
+<li>
+Call <code>#set_backtrace</code>
+</li>
+<li>
+Set <code>$!</code>
+</li>
+<li>
+Throw exception up the call stack
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-18" class="outline-2">
+<h2 id="sec-18">Step 1: <code>#exception()</code> </h2>
+<div class="outline-text-2" id="text-18">
+
+<p>You might think <code>raise</code> does this:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">raise</span>(klass, message, backtrace)
+  error = klass.new(message) <span style="color: #b22222;"># </span><span style="color: #b22222;">Nope!
+</span>  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>
+But in fact it does this:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">raise</span>(error_class_or_obj, message, backtrace)
+  error = error_class_or_obj.exception(message)
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-19" class="outline-2">
+<h2 id="sec-19"><code>.exception()</code> </h2>
+<div class="outline-text-2" id="text-19">
+
+<ul>
+<li id="sec-19_1"><code>Exception.exception</code> <br/>
+Equivalent to calling <code>Exception.new()</code>.
+</li>
+</ul>
+<ul>
+<li id="sec-19_2"><code>Exception#exception</code> <br/>
+<ul>
+<li id="sec-19_2_1">With no arguments, returns self. <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-19_2_2">With a message, returns a new exception. <br/>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-20" class="outline-2">
+<h2 id="sec-20">Implement your own <code>#exception()</code> </h2>
+<div class="outline-text-2" id="text-20">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">Net</span>::<span style="color: #228b22;">HTTPResponse</span>
+  <span style="color: #a020f0;">def</span> <span style="color: #0000ff;">exception</span>(message=<span style="color: #8b2252;">"HTTP Error"</span>)
+    <span style="color: #228b22;">RuntimeError</span>.new(<span style="color: #8b2252;">"</span><span style="color: #a0522d;">#{message}</span><span style="color: #8b2252;">: </span><span style="color: #a0522d;">#{code}</span><span style="color: #8b2252;">"</span>)
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+
+<span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span>response = <span style="color: #228b22;">Net</span>::<span style="color: #228b22;">HTTP</span>.get_response(url)
+<span style="color: #a020f0;">raise</span> response
+</pre>
+
+
+
+<pre class="example">
+exception_method.rb:11: HTTP Error: 404 (RuntimeError)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-21" class="outline-2">
+<h2 id="sec-21">Step 2: <code>#set_backtrace</code> </h2>
+<div class="outline-text-2" id="text-21">
+
+<p>Unless being re-raised with no extra arguments
+</p></div>
+
+</div>
+
+<div id="outline-container-22" class="outline-2">
+<h2 id="sec-22">Step 3: Set <code>$!</code> </h2>
+<div class="outline-text-2" id="text-22">
+
+
+
+
+<pre class="src src-ruby">require <span style="color: #8b2252;">'English'</span>
+puts <span style="color: #a0522d;">$!</span>.inspect
+<span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Oops"</span>
+<span style="color: #a020f0;">rescue</span>
+  puts <span style="color: #a0522d;">$!</span>.inspect
+  puts <span style="color: #a0522d;">$ERROR_INFO</span>.inspect
+<span style="color: #a020f0;">end</span>
+puts <span style="color: #a0522d;">$!</span>.inspect
+</pre>
+
+
+
+
+
+<pre class="example">
+nil
+#&lt;RuntimeError: Oops&gt;
+#&lt;RuntimeError: Oops&gt;
+nil
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-23" class="outline-2">
+<h2 id="sec-23">Step 4: Throw it up the call stack </h2>
+<div class="outline-text-2" id="text-23">
+
+<p>Until it hits a <code>rescue</code>, <code>ensure</code>, or exits the program.
+</p></div>
+
+</div>
+
+<div id="outline-container-24" class="outline-2">
+<h2 id="sec-24"><code>rescue</code> </h2>
+<div class="outline-text-2" id="text-24">
+
+<blockquote>
+
+<p>In practice, the rescue clause should be a short sequence of simple instructions
+designed to bring the object back to a stable state and to either retry the
+operation or terminate with failure.
+&ndash; <i>Object Oriented Software Construction</i>
+</p>
+</blockquote>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-25" class="outline-2">
+<h2 id="sec-25"><code>rescue</code> with no arguments &nbsp;&nbsp;&nbsp;<span class="tag"><span class="Incremental">Incremental</span></span></h2>
+<div class="outline-text-2" id="text-25">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">rescue</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+<ul>
+<li id="sec-25_1">Equivalent to&hellip; <br/>
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">rescue</span> <span style="color: #228b22;">StandardError</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-25_2">Won't catch: <br/>
+<ul>
+<li id="sec-25_2_1"><code>NoMemoryError</code> <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-25_2_2"><code>LoadError</code> <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-25_2_3"><code>NotImplementedError</code> <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-25_2_4"><code>SignalException</code> <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-25_2_5"><code>Interrupt</code> <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-25_2_6">And others&hellip; <br/>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-26" class="outline-2">
+<h2 id="sec-26"><code>rescue</code> with just a name </h2>
+<div class="outline-text-2" id="text-26">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">rescue</span> =&gt; error
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>
+&hellip;is equivalent to&hellip;
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">rescue</span> <span style="color: #228b22;">StandardError</span> =&gt; error
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-27" class="outline-2">
+<h2 id="sec-27"><code>rescue</code> with a class </h2>
+<div class="outline-text-2" id="text-27">
+
+<p>Only catches errors of that class.
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">rescue</span> <span style="color: #228b22;">SomeError</span> =&gt; error
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>
+Also accepts a list of classes:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">rescue</span> <span style="color: #228b22;">SomeError</span>, <span style="color: #228b22;">SomeOtherError</span> =&gt; error
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-28" class="outline-2">
+<h2 id="sec-28"><code>ensure</code> </h2>
+<div class="outline-text-2" id="text-28">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Uh oh"</span>
+<span style="color: #a020f0;">ensure</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">will always get here
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+<ul>
+<li id="sec-28_1">Always executed <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-28_2">Good place for required cleanup <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-29" class="outline-2">
+<h2 id="sec-29"><code>ensure</code> with explicit return </h2>
+<div class="outline-text-2" id="text-29">
+
+<p>An unexpected edge case documented by <a href="http://blog.leshill.org/blog/2009/11/17/ensure-with-explicit-return.html">Les Hill</a>:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #228b22;">Exception</span>, <span style="color: #8b2252;">"Very bad!"</span>
+<span style="color: #a020f0;">ensure</span>
+  <span style="color: #a020f0;">return</span> <span style="color: #8b2252;">"A-OK"</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+
+
+<pre class="example">
+A-OK
+</pre>
+
+<p>Ensure with an explicit return will eat <b>any</b> exception as if it had been
+caught and thrown away!
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-30" class="outline-2">
+<h2 id="sec-30"><code>retry</code> </h2>
+<div class="outline-text-2" id="text-30">
+
+
+
+
+<pre class="src src-ruby">tries = 0
+<span style="color: #a020f0;">begin</span>
+  tries += 1
+  puts <span style="color: #8b2252;">"Trying </span><span style="color: #a0522d;">#{tries}</span><span style="color: #8b2252;">..."</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Didn't work"</span>
+<span style="color: #a020f0;">rescue</span>
+  <span style="color: #a020f0;">retry</span> <span style="color: #a020f0;">if</span> tries &lt; 3
+  puts <span style="color: #8b2252;">"I give up"</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+
+
+<pre class="example">
+Trying 1...
+Trying 2...
+Trying 3...
+I give up
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-31" class="outline-2">
+<h2 id="sec-31"><code>raise</code> during exception handling </h2>
+<div class="outline-text-2" id="text-31">
+
+<p><img src="parachute.jpg"  alt="parachute.jpg" />
+</p></div>
+
+</div>
+
+<div id="outline-container-32" class="outline-2">
+<h2 id="sec-32"><code>raise</code> a new error </h2>
+<div class="outline-text-2" id="text-32">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Error A"</span>
+<span style="color: #a020f0;">rescue</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Error B"</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+<ul>
+<li id="sec-32_1">No way to discover original failure <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-32_2">Rails does this a lot <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-32_3">Please don't do this <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-33" class="outline-2">
+<h2 id="sec-33">Nested Exceptions </h2>
+<div class="outline-text-2" id="text-33">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">MyError</span> &lt; <span style="color: #228b22;">StandardError</span>
+  attr_reader <span style="color: #008b8b;">:original</span>
+  <span style="color: #a020f0;">def</span> <span style="color: #0000ff;">initialize</span>(msg, original=<span style="color: #a0522d;">nil</span>);
+    <span style="color: #a020f0;">super</span>(msg);
+    <span style="color: #a0522d;">@original</span> = original;
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+<span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">rescue</span> =&gt; error
+  <span style="color: #a020f0;">raise</span> <span style="color: #228b22;">MyError</span>.new(<span style="color: #8b2252;">"Error B"</span>, error)
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-34" class="outline-2">
+<h2 id="sec-34">Re-raise with the caught error </h2>
+<div class="outline-text-2" id="text-34">
+
+<p>Re-raises the same object again.
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">begin</span>
+    <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Error A"</span>
+  <span style="color: #a020f0;">rescue</span> =&gt; error
+    puts error.object_id.to_s(16)
+    <span style="color: #a020f0;">raise</span> error
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">rescue</span> =&gt; error
+  puts error.object_id.to_s(16)
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+
+
+
+<pre class="example">
+-244072b8
+-244072b8
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-35" class="outline-2">
+<h2 id="sec-35">Re-raise with new message </h2>
+<div class="outline-text-2" id="text-35">
+
+<p>Calls <code>#exception()</code> to create a new message.
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">begin</span>
+    <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Error A"</span>
+  <span style="color: #a020f0;">rescue</span> =&gt; error
+    puts error.inspect + <span style="color: #8b2252;">": "</span> + error.object_id.to_s(16)
+    <span style="color: #a020f0;">raise</span> error, <span style="color: #8b2252;">"Error B"</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">rescue</span> =&gt; error
+  puts error.inspect + <span style="color: #8b2252;">": "</span> + error.object_id.to_s(16)
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+
+
+
+<pre class="example">
+#&lt;RuntimeError: Error A&gt;: -243a6b7a
+#&lt;RuntimeError: Error B&gt;: -243a6bde
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-36" class="outline-2">
+<h2 id="sec-36">Re-raise with message and backtrace </h2>
+<div class="outline-text-2" id="text-36">
+
+<p>Calls <code>#exception()</code> and <code>#set_backtrace</code>
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">begin</span>
+    <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Error A"</span>
+  <span style="color: #a020f0;">rescue</span> =&gt; error
+    puts error.backtrace.first
+    <span style="color: #a020f0;">raise</span> error, <span style="color: #8b2252;">"Error B"</span>, [<span style="color: #8b2252;">"FAKE:42"</span>]
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">rescue</span> =&gt; error
+  puts error.backtrace.first
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+
+
+
+<pre class="example">
+-:3
+FAKE:42
+</pre>
+
+</div>
+
+</div>
+
+<div id="outline-container-37" class="outline-2">
+<h2 id="sec-37">Re-raise with no arguments </h2>
+<div class="outline-text-2" id="text-37">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Error A"</span>
+<span style="color: #a020f0;">rescue</span> =&gt; error
+  <span style="color: #a020f0;">raise</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>
+&hellip;is equivalent to&hellip;
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Error A"</span>
+<span style="color: #a020f0;">rescue</span> =&gt; error
+  <span style="color: #a020f0;">raise</span> <span style="color: #a0522d;">$!</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-38" class="outline-2">
+<h2 id="sec-38">Disallowing double-raise </h2>
+<div class="outline-text-2" id="text-38">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">module</span> <span style="color: #228b22;">NoDoubleRaise</span>
+  <span style="color: #a020f0;">def</span> <span style="color: #0000ff;">error_handled!</span>
+    <span style="color: #a0522d;">$!</span> = <span style="color: #a0522d;">nil</span>
+  <span style="color: #a020f0;">end</span>
+
+  <span style="color: #a020f0;">def</span> <span style="color: #0000ff;">raise</span>(*args)
+    <span style="color: #a020f0;">if</span> <span style="color: #a0522d;">$!</span>
+      warn <span style="color: #8b2252;">"Double raise at </span><span style="color: #a0522d;">#{caller.first}</span><span style="color: #8b2252;">, aborting"</span>
+      exit!
+    <span style="color: #a020f0;">else</span>
+      <span style="color: #a020f0;">super</span>
+    <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-39" class="outline-2">
+<h2 id="sec-39">Using <code>NoDoubleRaise</code> </h2>
+<div class="outline-text-2" id="text-39">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">module</span> <span style="color: #228b22;">Kernel</span>
+  include <span style="color: #228b22;">NoDoubleRaise</span>
+<span style="color: #a020f0;">end</span>
+
+<span style="color: #a020f0;">begin</span>
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"First error"</span>
+<span style="color: #a020f0;">rescue</span>
+  error_handled!
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Second error"</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-40" class="outline-2">
+<h2 id="sec-40"><code>else</code> </h2>
+<div class="outline-text-2" id="text-40">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">foo</span>
+  <span style="color: #a020f0;">yield</span>
+<span style="color: #a020f0;">rescue</span>
+  puts <span style="color: #8b2252;">"Only on error"</span>
+<span style="color: #a020f0;">else</span>
+  puts <span style="color: #8b2252;">"Only on success"</span>
+<span style="color: #a020f0;">ensure</span>
+  puts <span style="color: #8b2252;">"Always executed"</span>
+<span style="color: #a020f0;">end</span>
+
+foo{ <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Error"</span> }
+puts <span style="color: #8b2252;">"---"</span>
+foo{ <span style="color: #8b2252;">"No error"</span> }
+</pre>
+
+
+
+
+
+<pre class="example">
+Only on error
+Always executed
+---
+Only on success
+Always executed
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-41" class="outline-2">
+<h2 id="sec-41">Uncaught exceptions </h2>
+<div class="outline-text-2" id="text-41">
+
+
+
+
+<pre class="src src-ruby">trap <span style="color: #8b2252;">"EXIT"</span> { puts <span style="color: #8b2252;">"trap"</span> }
+at_exit { puts <span style="color: #8b2252;">"at_exit"</span> }
+<span style="color: #228b22;">END</span> { puts <span style="color: #8b2252;">"END"</span> }
+
+<span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Not handled"</span>
+</pre>
+
+
+
+
+
+
+
+<pre class="example">trap
+END
+at_exit
+unhandled.rb:5: Not handled (RuntimeError)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-42" class="outline-2">
+<h2 id="sec-42">A simple crash logger </h2>
+<div class="outline-text-2" id="text-42">
+
+
+
+
+<pre class="src src-ruby">at_exit <span style="color: #a020f0;">do</span>
+  <span style="color: #a020f0;">if</span> <span style="color: #a0522d;">$!</span>
+    open(<span style="color: #8b2252;">'crash.log'</span>, <span style="color: #8b2252;">'a'</span>)  <span style="color: #a020f0;">do</span> |log|
+      error = {
+        <span style="color: #008b8b;">:timestamp</span> =&gt; <span style="color: #228b22;">Time</span>.now,
+        <span style="color: #008b8b;">:message</span>   =&gt; <span style="color: #a0522d;">$!</span>.message,
+        <span style="color: #008b8b;">:backtrace</span> =&gt; <span style="color: #a0522d;">$!</span>.backtrace,
+        <span style="color: #008b8b;">:gems</span>      =&gt; <span style="color: #228b22;">Gem</span>.loaded_specs.inject({}){
+          |m, (n,s)| m.merge(n =&gt; s.version)
+        }
+      }
+      <span style="color: #228b22;">YAML</span>.dump(error, log)
+    <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-43" class="outline-2">
+<h2 id="sec-43">What about in threads? </h2>
+<div class="outline-text-2" id="text-43">
+
+
+
+
+<pre class="src src-ruby">t = <span style="color: #228b22;">Thread</span>.new { <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"oops"</span> }
+<span style="color: #a020f0;">begin</span>
+  t.join
+<span style="color: #a020f0;">rescue</span> =&gt; error
+  puts <span style="color: #8b2252;">"Child raised error: </span><span style="color: #a0522d;">#{error.inspect}</span><span style="color: #8b2252;">"</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+
+
+
+<pre class="example">
+Child raised error: #&lt;RuntimeError: oops&gt;
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-44" class="outline-2">
+<h2 id="sec-44">Are exceptions slow? </h2>
+<div class="outline-text-2" id="text-44">
+
+<ul>
+<li id="sec-44_1">Yes. <br/>
+<blockquote>
+
+<p>With Ruby 1.8.7, the algorithm&hellip; is about 37 times slower when Exceptions are
+involved.
+&ndash; <a href="http://www.simonecarletti.com/blog/2010/01/how-slow-are-ruby-exceptions/">Simon Carletti</a>
+</p>
+</blockquote>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-44_2">Ruby 1.9.1 has similar performance <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-45" class="outline-2">
+<h2 id="sec-45">Responding to Failures </h2>
+<div class="outline-text-2" id="text-45">
+
+<p><img src="panic.jpg"  alt="panic.jpg" />  
+</p></div>
+
+</div>
+
+<div id="outline-container-46" class="outline-2">
+<h2 id="sec-46">Return an error value </h2>
+<div class="outline-text-2" id="text-46">
+
+<p>Typically <code>nil</code>
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">save</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">rescue</span>
+  <span style="color: #a0522d;">nil</span>
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-47" class="outline-2">
+<h2 id="sec-47">Return a benign value </h2>
+<div class="outline-text-2" id="text-47">
+
+<blockquote>
+
+<p>The system might replace the erroneous value with a phony value that it knows
+to have a benign effect on the rest of the system.
+&ndash; <i>Code Complete</i>
+</p>
+</blockquote>
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  response = <span style="color: #228b22;">HTTP</span>.get_response(url)
+  <span style="color: #228b22;">JSON</span>.parse(response.body)
+<span style="color: #a020f0;">rescue</span> <span style="color: #228b22;">Net</span>::<span style="color: #228b22;">HTTPError</span>
+  {<span style="color: #8b2252;">"stock_quote"</span> =&gt; <span style="color: #8b2252;">"&lt;Unavailable&gt;"</span>}
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-48" class="outline-2">
+<h2 id="sec-48">The humble <code>puts</code> </h2>
+<div class="outline-text-2" id="text-48">
+
+
+
+
+<pre class="src src-ruby">puts <span style="color: #8b2252;">"Uh oh, something bad happened"</span>
+<span style="color: #a0522d;">$stderr</span>.puts <span style="color: #8b2252;">"Waiting..."</span>
+sleep 1
+puts <span style="color: #8b2252;">"Done"</span>
+</pre>
+
+
+<p>
+&hellip;produces:
+</p><pre class="example">
+Waiting...
+Uh oh, something bad happened
+Done
+</pre>
+
+
+<ul>
+<li id="sec-48_1">Not auto-flushed by default <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-49" class="outline-2">
+<h2 id="sec-49"><code>$stderr.puts</code> </h2>
+<div class="outline-text-2" id="text-49">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a0522d;">$stderr</span>.puts <span style="color: #8b2252;">"Uh oh, something bad happened"</span>
+</pre>
+
+
+<ul>
+<li id="sec-49_1">But there's a better way&hellip; <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-50" class="outline-2">
+<h2 id="sec-50"><code>warn</code> </h2>
+<div class="outline-text-2" id="text-50">
+
+
+
+
+<pre class="src src-ruby">warn <span style="color: #8b2252;">"Uh oh, something bad happened"</span>
+</pre>
+
+
+<ul>
+<li id="sec-50_1">Auto-flushed <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-50_2">Shorter <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-51" class="outline-2">
+<h2 id="sec-51">Warnings as errors </h2>
+<div class="outline-text-2" id="text-51">
+
+<ul>
+<li id="sec-51_1">We all know warnings can hide real problems&hellip; <br/>
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">module</span> <span style="color: #228b22;">Kernel</span>
+  <span style="color: #a020f0;">def</span> <span style="color: #0000ff;">warn</span>(message)
+    <span style="color: #a020f0;">raise</span> message
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+
+warn <span style="color: #8b2252;">"Uh oh"</span>
+</pre>
+
+
+<pre class="example">
+-:3:in `warn': Uh oh (RuntimeError)
+      from -:7
+</pre>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-52" class="outline-2">
+<h2 id="sec-52">Remote Failure Reporting </h2>
+<div class="outline-text-2" id="text-52">
+
+<ul>
+<li id="sec-52_1">Log a message <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-52_2">Send an email <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-52_3">Third-party Services <br/>
+<ul>
+<li id="sec-52_3_1">Hoptoad <br/>
+<a href="http://hoptoadapp.com/">http://hoptoadapp.com/</a>
+</li>
+</ul>
+<ul>
+<li id="sec-52_3_2">New Relic RPM <br/>
+<a href="http://newrelic.com">http://newrelic.com</a>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-52_4">Here be dragons <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-53" class="outline-2">
+<h2 id="sec-53">Avoid the failure cascade </h2>
+<div class="outline-text-2" id="text-53">
+
+<ul>
+<li id="sec-53_1">Failures have a way of multiplying <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-53_2">Circuit Breaker <br/>
+Described by Michael Nygard in "Release It"
+</li>
+</ul>
+<ul>
+<li id="sec-53_3">States <br/>
+<ul>
+<li id="sec-53_3_1">Closed <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-53_3_2">Open <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-53_3_3">Half-Open <br/>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-53_4">Ruby implementation <br/>
+<a href="https://github.com/wsargent/circuit_breaker">https://github.com/wsargent/circuit_breaker</a>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-54" class="outline-2">
+<h2 id="sec-54"><code>exit(1)</code> </h2>
+<div class="outline-text-2" id="text-54">
+
+<p>Raises <code>SystemExit</code>
+</p>
+
+
+<pre class="src src-ruby">warn <span style="color: #8b2252;">"Uh oh"</span>
+exit 1
+</pre>
+
+
+<p>
+&hellip;is quivalent to:
+</p>
+
+
+<pre class="src src-ruby">warn <span style="color: #8b2252;">"Uh oh"</span>
+<span style="color: #a020f0;">raise</span> <span style="color: #228b22;">SystemExit</span>.new(1)
+</pre>
+
+
+<p>
+There's a better way&hellip;
+</p></div>
+
+</div>
+
+<div id="outline-container-55" class="outline-2">
+<h2 id="sec-55"><code>abort</code> </h2>
+<div class="outline-text-2" id="text-55">
+
+
+
+
+<pre class="src src-ruby">abort <span style="color: #8b2252;">"Uh oh"</span>
+puts <span style="color: #8b2252;">"Will never get here."</span>
+</pre>
+
+
+<ul>
+<li id="sec-55_1">Prints a message <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-55_2">Raises SystemExit with a failure status <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-56" class="outline-2">
+<h2 id="sec-56"><code>exit!(1)</code> </h2>
+<div class="outline-text-2" id="text-56">
+
+
+
+
+<pre class="src src-ruby">warn <span style="color: #8b2252;">"Alas, cruel runtime!"</span>
+exit! 1
+</pre>
+
+
+<ul>
+<li id="sec-56_1"><b>Immediately</b> exits <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-56_2">Does not pass go. Does not collect $200. <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-56_3">No cleanup. <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-57" class="outline-2">
+<h2 id="sec-57">Your Failure Handling Strategy </h2>
+<div class="outline-text-2" id="text-57">
+
+<blockquote>
+
+<p>Error processing is turning out to be one of the thorniest problems of
+modern computer science, and you can't afford to deal with it haphazardly.
+&ndash; <i>Code Complete</i>
+</p>
+</blockquote>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-58" class="outline-2">
+<h2 id="sec-58">Exceptions shouldn't be expected </h2>
+<div class="outline-text-2" id="text-58">
+
+<blockquote>
+
+<p><b>Use exceptions only for exceptional situations.</b> [&hellip;] Exceptions are
+often overused. Because they distort the flow of control, they can lead to
+convoluted constructions that are prone to bugs. It is hardly exceptional to
+fail to open a file; generating an exception in this case strikes us as
+over-engineering.
+&ndash; <i>The Practice of Programming</i>
+</p>
+</blockquote>
+
+
+<ul>
+<li id="sec-58_1">Invalid user input isn't unusual <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-58_2">ActiveRecord's <code>#save</code> <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-59" class="outline-2">
+<h2 id="sec-59">A rule of thumb for raising </h2>
+<div class="outline-text-2" id="text-59">
+
+<blockquote>
+
+<p>We believe that exceptions should rarely be used as part of a program's
+normal flow; exceptions should be used for unexpected events. &hellip;ask
+yourself, 'Will this code still run if I remove all the exception handlers?"
+If the answer is "no", then maybe exceptions are being used in
+nonexceptional circumstances.
+&ndash; <i>The Pragmatic Programmer</i>
+</p>
+</blockquote>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-60" class="outline-2">
+<h2 id="sec-60">Use <code>throw</code> for expected cases </h2>
+<div class="outline-text-2" id="text-60">
+
+<p>Sinatra example:
+</p>
+
+
+<pre class="src src-ruby">get <span style="color: #8b2252;">'/foo'</span> <span style="color: #a020f0;">do</span>
+  last_modified some_timestamp
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...expensive GET logic...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>
+Implementation (simplified):
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">last_modified</span>(time)
+  response[<span style="color: #8b2252;">'Last-Modified'</span>] = time
+  request.env[<span style="color: #8b2252;">'HTTP_IF_MODIFIED_SINCE'</span>] &gt; time
+    <span style="color: #a020f0;">throw</span> <span style="color: #008b8b;">:halt</span>, response
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-61" class="outline-2">
+<h2 id="sec-61">What constitutes an exception? </h2>
+<div class="outline-text-2" id="text-61">
+
+<blockquote>
+
+<p><b>Detect errors at a low level, handle them at a high level.</b> [&hellip;] In most
+cases, the caller should determine how to handle an error, not the callee.
+&ndash; <i>The Practice of Programming</i>
+</p>
+</blockquote>
+
+
+<ul>
+<li id="sec-61_1">Is an EOF a failurer? Is a missing hash key an failure? <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-61_2">How about and HTTP 404? <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-61_3">Answer: it depends! <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-61_4">By raising an exception you force the issue <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-61_5">When in doubt, punt! <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-62" class="outline-2">
+<h2 id="sec-62">Caller-defined failure strategy </h2>
+<div class="outline-text-2" id="text-62">
+
+
+
+
+<pre class="src src-ruby">h.fetch(<span style="color: #008b8b;">:optional_key</span>){ <span style="color: #228b22;">DEFAULT_VALUE</span> }
+h.fetch(<span style="color: #008b8b;">:required_key</span>) {
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Required key not found!"</span>
+}
+
+arr.detect(lambda{<span style="color: #8b2252;">"None found"</span>}) {|x| ... }
+</pre>
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">my_awesome_method</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span>  <span style="color: #a020f0;">if</span> value
+    <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span>  <span style="color: #a020f0;">else</span>
+    <span style="color: #a020f0;">yield</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-63" class="outline-2">
+<h2 id="sec-63">Questions before raising </h2>
+<div class="outline-text-2" id="text-63">
+
+<ul>
+<li id="sec-63_1">When should I raise? <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-63_2">When <b>shouldn't</b> I raise? <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-64" class="outline-2">
+<h2 id="sec-64">Question #1 </h2>
+<div class="outline-text-2" id="text-64">
+
+<p>Is the situation truly unexpected?
+</p>
+
+
+<pre class="src src-ruby">puts <span style="color: #8b2252;">"Confirm (y/n)"</span>
+answer = gets.chomp
+<span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Huh?"</span> <span style="color: #a020f0;">unless</span> [?y, ?n].include?(answer)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-65" class="outline-2">
+<h2 id="sec-65">Question #2 </h2>
+<div class="outline-text-2" id="text-65">
+
+<p>Am I prepared to end the program?
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a0522d;">@ug</span> = <span style="color: #228b22;">UserGreeting</span>.find_by_name!(<span style="color: #8b2252;">"winter_holidays"</span>)
+</pre>
+
+
+<p>
+Vs.
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a0522d;">@ug</span> = <span style="color: #228b22;">UserGreeting</span>.find_by_name(<span style="color: #8b2252;">"winter_holidays"</span>)
+<span style="color: #a020f0;">unless</span> <span style="color: #a0522d;">@ug</span>
+  logger.error <span style="color: #8b2252;">"Someone forgot to run db:populate"</span>
+  <span style="color: #a0522d;">@ua</span> = <span style="color: #228b22;">OpenStruct</span>.new(<span style="color: #008b8b;">:welcome</span> =&gt; <span style="color: #8b2252;">"Hello"</span>)
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-66" class="outline-2">
+<h2 id="sec-66">Question #3 </h2>
+<div class="outline-text-2" id="text-66">
+
+<p>Can I punt the decision?
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">fetch_quotes</span>(options =&gt; {})
+  on_error = options.fetch(<span style="color: #008b8b;">:on_error</span>) { 
+    lambda{|r| 
+      <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"Failure fetching quotes: </span><span style="color: #a0522d;">#{r.code}</span><span style="color: #8b2252;">"</span>}}
+
+  response = <span style="color: #a020f0;">do</span>_fetch(...)
+  <span style="color: #a020f0;">if</span> !response.success?
+    on_error.call(response)
+  <span style="color: #a020f0;">end</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-67" class="outline-2">
+<h2 id="sec-67">Question #4 </h2>
+<div class="outline-text-2" id="text-67">
+
+<p>Am I throwing away valuable diagnostics?
+</p>
+
+
+<pre class="src src-ruby">result = some_fifteen_minute_operation()
+<span style="color: #a020f0;">if</span> result.has_raisins_in_it?
+  <span style="color: #a020f0;">raise</span> <span style="color: #8b2252;">"I HATE RAISINS"</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>
+Vs.
+</p>
+
+
+<pre class="src src-ruby">result = some_fifteen_minute_operation()
+<span style="color: #a020f0;">if</span> result.has_raisins_in_it?
+  problem_flags &lt;&lt; <span style="color: #008b8b;">:icky_raisins</span>
+<span style="color: #a020f0;">end</span>
+<span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span></pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-68" class="outline-2">
+<h2 id="sec-68">Question #5 </h2>
+<div class="outline-text-2" id="text-68">
+
+<p>Would continuing result in a less informative exception?
+</p>
+
+
+<pre class="src src-ruby">response_code = might_return_nil()
+message = codes_to_messages[response_code]
+response = <span style="color: #8b2252;">"System Status: "</span> + message
+<span style="color: #b22222;"># </span><span style="color: #b22222;">What do you mean "Can't convert nil into string"?!
+</span></pre>
+
+
+<p>
+Vs.
+</p>
+
+
+<pre class="src src-ruby">response_code = might_return_nil() <span style="color: #a020f0;">or</span> 
+  <span style="color: #a020f0;">fail</span> <span style="color: #8b2252;">"No response code"</span>
+<span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span></pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-69" class="outline-2">
+<h2 id="sec-69">Isolate exception handling code </h2>
+<div class="outline-text-2" id="text-69">
+
+<blockquote>
+
+<p>as exception represents an immediate, nonlocal transfer of control - it's a
+kind of cascading <code>goto</code>. Programs that use exceptions as part of their
+normal processing suffer from all the readability and maintainability
+problems of classic spaghetti code.
+&ndash; <i>The Pragmatic Programmer</i>
+</p>
+</blockquote>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-70" class="outline-2">
+<h2 id="sec-70"><code>begin</code> is a code smell </h2>
+<div class="outline-text-2" id="text-70">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  try_something
+  <span style="color: #a020f0;">rescue</span>
+    <span style="color: #a020f0;">begin</span>
+      try_something_else
+    <span style="color: #a020f0;">rescue</span>
+      <span style="color: #b22222;"># </span><span style="color: #b22222;">handle failure
+</span>    <span style="color: #a020f0;">end</span>
+  <span style="color: #a020f0;">end</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-71" class="outline-2">
+<h2 id="sec-71">Method-level exception clauses </h2>
+<div class="outline-text-2" id="text-71">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">foo</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">mainline logic goes here
+</span><span style="color: #a020f0;">rescue</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">error handling goes here
+</span><span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-72" class="outline-2">
+<h2 id="sec-72">Guard methods </h2>
+<div class="outline-text-2" id="text-72">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  something_that_might_fail
+<span style="color: #a020f0;">rescue</span> <span style="color: #228b22;">IOError</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">handle IOError
+</span><span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>
+&hellip;becomes&hellip;
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">handle_io_errors</span>
+   <span style="color: #a020f0;">yield</span>
+<span style="color: #a020f0;">rescue</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">handle IOError
+</span><span style="color: #a020f0;">end</span>
+
+handle_io_errors { something_that_might_fail }
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-73" class="outline-2">
+<h2 id="sec-73">Exception Safety </h2>
+<div class="outline-text-2" id="text-73">
+
+<blockquote>
+
+<p>Should a library attempt a recovery when something goes wrong? Not usually,
+but it might do a service by making sure it leaves information in as clean
+and harmless a state as possible.
+&ndash; <i>The Practice of Programming</i>
+</p>
+</blockquote>
+
+
+<p>
+A method's exception safety describes how it will behave in the presence of
+exceptions.
+</p>
+<p>
+Critical methods need known exception semantics.
+</p></div>
+
+</div>
+
+<div id="outline-container-74" class="outline-2">
+<h2 id="sec-74">The Three Guarantees </h2>
+<div class="outline-text-2" id="text-74">
+
+<ul>
+<li id="sec-74_1">The weak guarantee <br/>
+The object will be left in a consistent state.
+</li>
+</ul>
+<ul>
+<li id="sec-74_2">The strong guarantee <br/>
+The object will be rolled back to its beginning state.
+</li>
+</ul>
+<ul>
+<li id="sec-74_3">The nothrow guarantee <br/>
+No exceptions will be raised.
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-75" class="outline-2">
+<h2 id="sec-75">When you least expect it &nbsp;&nbsp;&nbsp;<span class="tag"><span class="Incremental">Incremental</span>&nbsp;<span class="ShowFirst">ShowFirst</span></span></h2>
+<div class="outline-text-2" id="text-75">
+
+<ul>
+<li id="sec-75_1">What parts of this code can raise exceptions? <br/>
+
+
+
+<pre class="src src-ruby">size   = <span style="color: #228b22;">File</span>.size(<span style="color: #8b2252;">'/home/avdi/.emacs'</span>)
+kbytes = size / 1024
+puts <span style="color: #8b2252;">"File size is </span><span style="color: #a0522d;">#{size}</span><span style="color: #8b2252;">k"</span>
+</pre>
+
+
+</li>
+</ul>
+<ul>
+<li id="sec-75_2">Any of it! <br/>
+<ul>
+<li id="sec-75_2_1">NoMemoryError <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-75_2_2">SignalException <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-75_2_3">Etc. <br/>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-76" class="outline-2">
+<h2 id="sec-76">Exception testing </h2>
+<div class="outline-text-2" id="text-76">
+
+<ul>
+<li id="sec-76_1">A test script <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-76_2">An assertion or assertions <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-76_3">Record <br/>
+Execute script, record a set of call-points
+</li>
+</ul>
+<ul>
+<li id="sec-76_4">Playback <br/>
+Execute once for every call-point, forcing exception
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-77" class="outline-2">
+<h2 id="sec-77">Code Under Test </h2>
+<div class="outline-text-2" id="text-77">
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">swap_keys</span>(hash, x_key, y_key)
+  temp = hash[x_key]
+  hash[x_key] = hash[y_key]
+  hash[y_key] = temp
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-78" class="outline-2">
+<h2 id="sec-78">Record </h2>
+<div class="outline-text-2" id="text-78">
+
+
+
+
+<pre class="src src-ruby">h = {<span style="color: #008b8b;">:a</span> =&gt; 42, <span style="color: #008b8b;">:b</span> =&gt; 23}
+tester = <span style="color: #228b22;">ExceptionTester</span>.new{ swap_keys(h, <span style="color: #008b8b;">:a</span>, <span style="color: #008b8b;">:b</span>) }
+</pre>
+
+
+<p>
+<img src="exception-testing-recording.png"  alt="exception-testing-recording.png" />
+</p></div>
+
+</div>
+
+<div id="outline-container-79" class="outline-2">
+<h2 id="sec-79">Playback </h2>
+<div class="outline-text-2" id="text-79">
+
+
+
+
+<pre class="src src-ruby">tester.assert{
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">Assert the keys are either fully swapped
+</span>  <span style="color: #b22222;"># </span><span style="color: #b22222;">or not swapped at all
+</span>  (h == {<span style="color: #008b8b;">:a</span> =&gt; 42, <span style="color: #008b8b;">:b</span> =&gt; 23}) ||
+  (h == {<span style="color: #008b8b;">:a</span> =&gt; 23, <span style="color: #008b8b;">:b</span> =&gt; 42})
+}
+</pre>
+
+
+<p>
+<img src="exception-testing-playback.png"  alt="exception-testing-playback.png" />
+</p></div>
+
+</div>
+
+<div id="outline-container-80" class="outline-2">
+<h2 id="sec-80">Validity vs. Consistency </h2>
+<div class="outline-text-2" id="text-80">
+
+<p>An object can be consistent but invalid.
+</p><ul>
+<li id="sec-80_1">Validity <br/>
+Are the business rules for the data met?
+</li>
+</ul>
+<ul>
+<li id="sec-80_2">Consistency <br/>
+Can the object operate without crashing, or exhibiting undefined behavior?
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-81" class="outline-2">
+<h2 id="sec-81">Be specific when eating exceptions </h2>
+<div class="outline-text-2" id="text-81">
+
+<p>Please don't do this:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">rescue</span> <span style="color: #228b22;">Exception</span>
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+<p>
+If you can't match on class, match on message:
+</p>
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">begin</span>
+  <span style="color: #b22222;"># </span><span style="color: #b22222;">...
+</span><span style="color: #a020f0;">rescue</span> =&gt; error
+  <span style="color: #a020f0;">raise</span> <span style="color: #a020f0;">unless</span> error.message =~ <span style="color: #8b2252;">/foo bar/</span>
+<span style="color: #a020f0;">end</span>
+
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-82" class="outline-2">
+<h2 id="sec-82">Define your own error base class </h2>
+<div class="outline-text-2" id="text-82">
+
+<ul>
+<li id="sec-82_1">Especially important in libraries <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-82_2">Wrap other exceptions <br/>
+<blockquote>
+
+<p>A routine should present a consistent abstraction in its interface, and so
+should a class. The exceptions thrown are part of the routine interface,
+just like the specific data types are.
+&ndash; Steve McConnell
+</p>
+</blockquote>
+
+
+
+
+<pre class="src src-ruby"><span style="color: #a020f0;">rescue</span> <span style="color: #228b22;">MyLibrary</span>::<span style="color: #228b22;">Error</span>
+  <span style="color: #a020f0;">raise</span>
+<span style="color: #a020f0;">rescue</span> =&gt; error
+  <span style="color: #a020f0;">raise</span> <span style="color: #228b22;">MyLibrary</span>::<span style="color: #228b22;">Error</span>.new(
+    <span style="color: #8b2252;">"</span><span style="color: #a0522d;">#{error.class}</span><span style="color: #8b2252;">: </span><span style="color: #a0522d;">#{error.message}</span><span style="color: #8b2252;">"</span>,
+    error)
+<span style="color: #a020f0;">end</span>
+</pre>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-83" class="outline-2">
+<h2 id="sec-83">What exception classes do I need? </h2>
+<div class="outline-text-2" id="text-83">
+
+<ul>
+<li id="sec-83_1">Based on module? <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-83_2">Based on software layer? <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-83_3">Based on severity? <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-83_4">Let's try working backwards&hellip; <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-84" class="outline-2">
+<h2 id="sec-84">User Error </h2>
+<div class="outline-text-2" id="text-84">
+
+<p>"That is not a valid selection. Please check your entry and try again."
+<img src="403.jpg" style="clear: both" alt="403.jpg" />
+</p></div>
+
+</div>
+
+<div id="outline-container-85" class="outline-2">
+<h2 id="sec-85">Logic Error </h2>
+<div class="outline-text-2" id="text-85">
+
+<p>"Something has gone wrong. We have been informed and are working on it."
+<img src="kirk.png" style="clear: both" alt="kirk.png" />
+</p></div>
+
+</div>
+
+<div id="outline-container-86" class="outline-2">
+<h2 id="sec-86">Transient Error </h2>
+<div class="outline-text-2" id="text-86">
+
+<p>"That service is temporarily unavailable. Please try again later."
+<img src="failwhale.gif"  alt="failwhale.gif" />
+</p></div>
+
+</div>
+
+<div id="outline-container-87" class="outline-2">
+<h2 id="sec-87">Three essential exception classes </h2>
+<div class="outline-text-2" id="text-87">
+
+<ul>
+<li id="sec-87_1">UserError <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-87_2">LogicError <br/>
+<ul>
+<li id="sec-87_2_1">InternalError <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-87_2_2">ClientError (for libraries) <br/>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-87_3">TransientError <br/>
+<ul>
+<li id="sec-87_3_1">TimeoutError <br/>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-88" class="outline-2">
+<h2 id="sec-88">A Recap </h2>
+<div class="outline-text-2" id="text-88">
+
+<p>&hellip;is not going to happen.
+</p></div>
+
+</div>
+
+<div id="outline-container-89" class="outline-2">
+<h2 id="sec-89">Thank You! </h2>
+<div class="outline-text-2" id="text-89">
+
+<ul>
+<li id="sec-89_1">References <br/>
+<a href="http://avdi.org/devblog/exceptional-ruby">http://avdi.org/devblog/exceptional-ruby</a>
+</li>
+</ul>
+<ul>
+<li id="sec-89_2">Contact <br/>
+<ul>
+<li>
+Home: <a href="http://avdi.org">http://avdi.org</a>
+</li>
+<li>
+Email: avdi@avdi.org
+</li>
+<li>
+Twitter: @avdi
+</li>
+</ul>
+
+</li>
+</ul>
+<ul>
+<li id="sec-89_3">Photo Credits <br/>
+"Panic Button" by <a href="http://www.flickr.com/people/trancemist/">Michael Manitius</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
