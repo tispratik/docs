@@ -1,10 +1,6 @@
 class BST
  attr_accessor :root
 
- def initialize
-   root = nil
- end
-
  def insert(value)
    if @root == nil
      @root = DataObject.new(value)
