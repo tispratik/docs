@@ -1,0 +1,892 @@
+Mon Jun 06 09:44:40
+pratikk@pratikk01: ~/Installations/raducotescu-vmware-server-linux-2.6.3x-kernel-84fa8c2 ruby-1.9.2
+→ ls
+LICENSE  README  start-VMware-console.sh*  vmware-config.patch  vmware-server-2.0.2-203138-update.patch  vmware-server-2.0.x-kernel-2.6.3x-install.sh*
+
+
+Mon Jun 06 09:44:42
+pratikk@pratikk01: ~/Installations/raducotescu-vmware-server-linux-2.6.3x-kernel-84fa8c2 ruby-1.9.2
+→ sudo ./vmware-server-2.0.x-kernel-2.6.3x-install.sh ../
+You have VMware Server archive: 
+	VMware-server-2.0.2-203138.i386.tar.gz
+Checking for needed packages on Ubuntu
+You do have the linux-headers-2.6.35-28-generic-pae package...
+You do have the build-essential package...
+You do have the patch package...
+Extracting the contents of VMware-server-2.0.2-203138.i386.tar.gz
+Found .tar file for vmci module
+Found .tar file for vmmon module
+Found .tar file for vmnet module
+Found .tar file for vsock module
+Extracting .tar files in order to apply the patch...
+Untarring ..//vmware-server-distrib/lib/modules/source/vmci.tar
+Untarring ..//vmware-server-distrib/lib/modules/source/vmmon.tar
+Untarring ..//vmware-server-distrib/lib/modules/source/vmnet.tar
+Untarring ..//vmware-server-distrib/lib/modules/source/vsock.tar
+Testing patch...
+Creating some simlinks for the newer kernels...
+Applying patch...
+Preparing new tar file for vmci module
+Preparing new tar file for vmmon module
+Preparing new tar file for vmnet module
+Preparing new tar file for vsock module
+Checking that the compiling will succeed...
+Trying to compile vmci module to see if it works
+Performing make in ..//vmware-server-distrib/lib/modules/source/vmci-only
+Using 2.6.x kernel build system.
+Trying to compile vmmon module to see if it works
+Performing make in ..//vmware-server-distrib/lib/modules/source/vmmon-only
+Using 2.6.x kernel build system.
+In file included from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./common/vmx86.h:32,
+                 from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/linux/driver.h:29,
+                 from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/linux/driver.c:101:
+/home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+In file included from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./common/vmx86.h:32,
+                 from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/linux/driver.h:29,
+                 from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/linux/driver.c:101:
+/home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+In file included from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./common/vmx86.h:32,
+                 from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./common/hostif.h:32,
+                 from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/linux/hostif.c:73:
+/home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+In file included from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/common/vmx86.h:32,
+                 from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/common/vmx86.c:40:
+/home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+In file included from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./common/vmx86.h:32,
+                 from /home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/vmcore/moduleloop.c:35:
+/home/pratikk/Installations/vmware-server-distrib/lib/modules/source/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+Trying to compile vmnet module to see if it works
+Performing make in ..//vmware-server-distrib/lib/modules/source/vmnet-only
+Using 2.6.x kernel build system.
+Rebuilding tar files...
+Replacing original file vmci.tar with patched file...
+Replacing original file vmmon.tar with patched file...
+Replacing original file vmnet.tar with patched file...
+Replacing original file vsock.tar with patched file...
+Removing binaries directory...
+Patching vmware-install.pl...
+patching file ..//vmware-server-distrib/bin/vmware-config.pl
+Starting VMware Server original install script...
+A previous installation of VMware Server has been detected.
+
+The previous installation was made by the tar installer (version 4).
+
+Keeping the tar4 installer database format.
+
+You have a previous version of VMware Server installed.  Continuing this 
+install will upgrade to the latest version by first uninstalling the previous 
+version.  Do you wish to continue? (yes/no) [yes] 
+
+Uninstalling the tar installation of VMware Server.
+
+Checking for active VMs:
+There are no Active VMs.
+Stopping services for VMware Server
+
+Stopping VMware autostart virtual machines:
+   Virtual machines                                                   failed
+Stopping VMware management services:
+   VMware Virtual Infrastructure Web Access
+   VMware Server Host Agent                                           failed
+Stopping VMware services:
+   VMware Authentication Daemon                                        done
+   Virtual machine monitor                                             done
+
+insserv: warning: script 'K02acpi-support' missing LSB tags and overrides
+insserv: script vmware-mgmt: service VMware already provided!
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'module-init-tools' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `module-init-tools'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `module-init-tools'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'network-interface' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `network-interface'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `network-interface'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'console-setup' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `console-setup'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `console-setup'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'apport' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `apport'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `apport'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'irqbalance' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `irqbalance'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `irqbalance'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'atd' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `atd'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `atd'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'plymouth-splash' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `plymouth-splash'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `plymouth-splash'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'ufw' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `ufw'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `ufw'
+insserv: script postgresql-8.4: service postgresql already provided!
+insserv: script postgresql-8.4: service postgresql-8.4 already provided!
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'plymouth-log' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `plymouth-log'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `plymouth-log'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'udevtrigger' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `udevtrigger'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `udevtrigger'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'hostname' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `hostname'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `hostname'
+insserv: script vmware-core: service VMware already provided!
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'network-interface-security' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `network-interface-security'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `network-interface-security'
+insserv: script vmware-autostart: service VMware already provided!
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'cron' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `cron'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `cron'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'gdm' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `gdm'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `gdm'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'hwclock-save' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `hwclock-save'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `hwclock-save'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'avahi-daemon' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `avahi-daemon'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `avahi-daemon'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'procps' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `procps'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `procps'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'plymouth-stop' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `plymouth-stop'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `plymouth-stop'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'dmesg' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `dmesg'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `dmesg'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'rsyslog' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `rsyslog'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `rsyslog'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'cups' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `cups'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `cups'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'acpid' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `acpid'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `acpid'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'hwclock' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `hwclock'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `hwclock'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'mysql' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `mysql'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `mysql'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'alsa-mixer-save' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `alsa-mixer-save'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `alsa-mixer-save'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'udevmonitor' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `udevmonitor'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `udevmonitor'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'dbus' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `dbus'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `dbus'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'failsafe-x' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `failsafe-x'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `failsafe-x'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'screen-cleanup' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `screen-cleanup'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `screen-cleanup'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'udev' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `udev'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `udev'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'network-manager' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `network-manager'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `network-manager'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'anacron' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `anacron'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `anacron'
+insserv: warning: script 'acpi-support' missing LSB tags and overrides
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'udev-finish' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `udev-finish'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `udev-finish'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'plymouth' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `plymouth'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `plymouth'
+ * Stopping internet superserver xinetd                                                                                                                                                                                               [ OK ] 
+ * Starting internet superserver xinetd                                                                                                                                                                                               [ OK ] 
+The removal of VMware Server 2.0.2 build-203138 for Linux completed 
+successfully.
+
+Installing VMware Server.
+
+In which directory do you want to install the binary files? 
+[/usr/bin] 
+
+What is the directory that contains the init directories (rc0.d/ to rc6.d/)? 
+[/etc] 
+
+What is the directory that contains the init scripts? 
+[/etc/init.d] 
+
+In which directory do you want to install the daemon files? 
+[/usr/sbin] 
+
+In which directory do you want to install the library files? 
+[/usr/lib/vmware] 
+
+The path "/usr/lib/vmware" does not exist currently. This program is going to 
+create it, including needed parent directories. Is this what you want? 
+[yes] 
+
+In which directory do you want to install the manual files? 
+[/usr/share/man] 
+
+In which directory do you want to install the documentation files? 
+[/usr/share/doc/vmware] 
+
+The path "/usr/share/doc/vmware" does not exist currently. This program is 
+going to create it, including needed parent directories. Is this what you want?
+[yes] 
+
+The installation of VMware Server 2.0.2 build-203138 for Linux completed 
+successfully. You can decide to remove this software from your system at any 
+time by invoking the following command: "/usr/bin/vmware-uninstall.pl".
+
+Before running VMware Server for the first time, you need to configure it by 
+invoking the following command: "/usr/bin/vmware-config.pl". Do you want this 
+program to invoke the command for you now? [yes] 
+
+Making sure services for VMware Server are stopped.
+
+Stopping VMware autostart virtual machines:
+   Virtual machines                                                   failed
+Stopping VMware management services:
+   VMware Virtual Infrastructure Web Access
+   VMware Server Host Agent                                           failed
+Stopping VMware services:
+   VMware Authentication Daemon                                        done
+   Virtual machine monitor                                             done
+
+You must read and accept the End User License Agreement to continue.
+Press enter to display it. 
+
+NOTICE:  BY DOWNLOADING AND INSTALLING, COPYING OR OTHERWISE USING THE 
+SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS VMWARE MASTER END 
+USER LICENSE AGREEMENT ("EULA").  IF YOU DO NOT AGREE TO THE TERMS OF 
+THIS EULA, YOU MAY NOT DOWNLOAD, INSTALL, COPY OR USE THE SOFTWARE, AND 
+YOU MAY RETURN THE UNUSED SOFTWARE TO THE VENDOR FROM WHICH YOU ACQUIRED 
+IT WITHIN THIRTY (30) DAYS AND REQUEST A REFUND OF THE LICENSE FEE, IF 
+ANY, ALREADY PAID UPON SHOWING PROOF OF PAYMENT.  "YOU" MEANS THE 
+NATURAL PERSON OR THE ENTITY THAT IS AGREEING TO BE BOUND BY THIS EULA, 
+THEIR EMPLOYEES AND THIRD PARTY CONTRACTORS THAT PROVIDE SERVICES TO 
+YOU.  YOU SHALL BE LIABLE FOR ANY FAILURE BY SUCH EMPLOYEES AND THIRD 
+PARTY CONTRACTORS TO COMPLY WITH THE TERMS OF THIS AGREEMENT.
+
+1.	DEFINITIONS
+
+1.1	"Designated Administrative Access" means that access to the 
+standard user interfaces of a given instance of the Software 
+(designated in this section) that you may grant to a designated 
+third party (a) for which you have provided advance written notice 
+to VMware that you are providing outsourced services and (b) for 
+whose dedicated benefit you have licensed such instance of the 
+Software.  Designated Administrative Access is applicable only 
+where you are 1) an IT outsourcing company that is providing 
+outsourced IT services to a client company and 2) applicable only 
+to the following Software: ESX Server, VMware Server and 
+VirtualCenter.
+
+1.2	"GPL Software" means GPL software licensed to you under the GNU 
+General Public License as published by the Free Software Foundation 
+(GPL).  A copy of the GPL is included on the media on which you 
+received the Software or included in the files you downloaded, if 
+you acquired the Software by electronic download.  
+
+1.3	"Guest Operating Systems" means instances of third-party operating 
+systems licensed by you and installed in a Virtual Machine and run 
+using the Software.
+
+1.4	"Licensed Additional Module" means additional modules that may be 
+provided with and/or used in conjunction with the Software for 
+which you have paid the applicable license fee and accepted any 
+applicable additional license terms. 
+ 
+1.5	"Open Source Software" means various open source software 
+components licensed under the terms of applicable open source 
+license agreements included in the materials relating to such 
+software.  Open Source Software is composed of individual software 
+components, each of which has its own copyright and its own 
+
+Do you accept? (yes/no) yes
+
+Thank you.
+
+None of the pre-built vmmon modules for VMware Server is suitable for your 
+running kernel.  Do you want this program to try to build the vmmon module for 
+your system (you need to have a C compiler installed on your system)? [yes] 
+
+Using compiler "/usr/bin/gcc". Use environment variable CC to override.
+
+What is the location of the directory of C header files that match your running
+kernel? [/lib/modules/2.6.35-28-generic-pae/build/include] 
+
+Extracting the sources of the vmmon module.
+
+Building the vmmon module.
+
+Using 2.6.x kernel build system.
+make: Entering directory `/tmp/vmware-config0/vmmon-only'
+make -C /lib/modules/2.6.35-28-generic-pae/build/include/.. SUBDIRS=$PWD SRCROOT=$PWD/. modules
+make[1]: Entering directory `/usr/src/linux-headers-2.6.35-28-generic-pae'
+  CC [M]  /tmp/vmware-config0/vmmon-only/linux/driver.o
+In file included from /tmp/vmware-config0/vmmon-only/./common/vmx86.h:32,
+                 from /tmp/vmware-config0/vmmon-only/linux/driver.h:29,
+                 from /tmp/vmware-config0/vmmon-only/linux/driver.c:101:
+/tmp/vmware-config0/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+In file included from /tmp/vmware-config0/vmmon-only/./common/vmx86.h:32,
+                 from /tmp/vmware-config0/vmmon-only/linux/driver.h:29,
+                 from /tmp/vmware-config0/vmmon-only/linux/driver.c:101:
+/tmp/vmware-config0/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+  CC [M]  /tmp/vmware-config0/vmmon-only/linux/driverLog.o
+  CC [M]  /tmp/vmware-config0/vmmon-only/linux/hostif.o
+In file included from /tmp/vmware-config0/vmmon-only/./common/vmx86.h:32,
+                 from /tmp/vmware-config0/vmmon-only/./common/hostif.h:32,
+                 from /tmp/vmware-config0/vmmon-only/linux/hostif.c:73:
+/tmp/vmware-config0/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+  CC [M]  /tmp/vmware-config0/vmmon-only/common/comport.o
+  CC [M]  /tmp/vmware-config0/vmmon-only/common/cpuid.o
+  CC [M]  /tmp/vmware-config0/vmmon-only/common/hashFunc.o
+  CC [M]  /tmp/vmware-config0/vmmon-only/common/memtrack.o
+  CC [M]  /tmp/vmware-config0/vmmon-only/common/phystrack.o
+  CC [M]  /tmp/vmware-config0/vmmon-only/common/task.o
+  CC [M]  /tmp/vmware-config0/vmmon-only/common/vmx86.o
+In file included from /tmp/vmware-config0/vmmon-only/common/vmx86.h:32,
+                 from /tmp/vmware-config0/vmmon-only/common/vmx86.c:40:
+/tmp/vmware-config0/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+  CC [M]  /tmp/vmware-config0/vmmon-only/vmcore/moduleloop.o
+In file included from /tmp/vmware-config0/vmmon-only/./common/vmx86.h:32,
+                 from /tmp/vmware-config0/vmmon-only/vmcore/moduleloop.c:35:
+/tmp/vmware-config0/vmmon-only/./include/x86msr.h:164: warning: "MSR_THERM2_CTL" redefined
+/usr/src/linux-headers-2.6.35-28-generic-pae/arch/x86/include/asm/msr-index.h:236: note: this is the location of the previous definition
+  LD [M]  /tmp/vmware-config0/vmmon-only/vmmon.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /tmp/vmware-config0/vmmon-only/vmmon.mod.o
+  LD [M]  /tmp/vmware-config0/vmmon-only/vmmon.ko
+make[1]: Leaving directory `/usr/src/linux-headers-2.6.35-28-generic-pae'
+cp -f vmmon.ko ./../vmmon.o
+make: Leaving directory `/tmp/vmware-config0/vmmon-only'
+The vmmon module loads perfectly into the running kernel.
+
+None of the pre-built vmci modules for VMware Server is suitable for your 
+running kernel.  Do you want this program to try to build the vmci module for 
+your system (you need to have a C compiler installed on your system)? [yes] 
+
+Extracting the sources of the vmci module.
+
+Building the vmci module.
+
+Using 2.6.x kernel build system.
+make: Entering directory `/tmp/vmware-config0/vmci-only'
+make -C /lib/modules/2.6.35-28-generic-pae/build/include/.. SUBDIRS=$PWD SRCROOT=$PWD/. modules
+make[1]: Entering directory `/usr/src/linux-headers-2.6.35-28-generic-pae'
+  CC [M]  /tmp/vmware-config0/vmci-only/linux/driver.o
+  CC [M]  /tmp/vmware-config0/vmci-only/linux/driverLog.o
+  CC [M]  /tmp/vmware-config0/vmci-only/linux/vmciKernelIf.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciContext.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciDatagram.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciDriver.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciDs.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciEvent.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciGroup.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciHashtable.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciProcess.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciQueuePair.o
+  CC [M]  /tmp/vmware-config0/vmci-only/common/vmciResource.o
+  LD [M]  /tmp/vmware-config0/vmci-only/vmci.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /tmp/vmware-config0/vmci-only/vmci.mod.o
+  LD [M]  /tmp/vmware-config0/vmci-only/vmci.ko
+make[1]: Leaving directory `/usr/src/linux-headers-2.6.35-28-generic-pae'
+cp -f vmci.ko ./../vmci.o
+make: Leaving directory `/tmp/vmware-config0/vmci-only'
+The vmci module loads perfectly into the running kernel.
+
+VMWare config patch VMCI!
+`/tmp/vmware-config0/vmci-only/Module.symvers' -> `/tmp/vmware-config0/../Module.symvers'
+None of the pre-built vsock modules for VMware Server is suitable for your 
+running kernel.  Do you want this program to try to build the vsock module for 
+your system (you need to have a C compiler installed on your system)? [yes] 
+
+Extracting the sources of the vsock module.
+
+VMWare config patch VSOCK!
+`/tmp/vmware-config0/../Module.symvers' -> `/tmp/vmware-config0/vsock-only/Module.symvers'
+Building the vsock module.
+
+Using 2.6.x kernel build system.
+make: Entering directory `/tmp/vmware-config0/vsock-only'
+make -C /lib/modules/2.6.35-28-generic-pae/build/include/.. SUBDIRS=$PWD SRCROOT=$PWD/. modules
+make[1]: Entering directory `/usr/src/linux-headers-2.6.35-28-generic-pae'
+  CC [M]  /tmp/vmware-config0/vsock-only/linux/af_vsock.o
+/tmp/vmware-config0/vsock-only/linux/af_vsock.c:340: warning: initialization from incompatible pointer type
+/tmp/vmware-config0/vsock-only/linux/af_vsock.c: In function ‘VSockVmciPoll’:
+/tmp/vmware-config0/vsock-only/linux/af_vsock.c:3394: error: ‘struct sock’ has no member named ‘sk_sleep’
+make[2]: *** [/tmp/vmware-config0/vsock-only/linux/af_vsock.o] Error 1
+make[1]: *** [_module_/tmp/vmware-config0/vsock-only] Error 2
+make[1]: Leaving directory `/usr/src/linux-headers-2.6.35-28-generic-pae'
+make: *** [vsock.ko] Error 2
+make: Leaving directory `/tmp/vmware-config0/vsock-only'
+Unable to build the vsock module.
+
+The VM communication interface socket family is used in conjunction with the VM
+communication interface to provide a new communication path among guests and 
+host.  The rest of this software provided by VMware Server is designed to work 
+independently of this feature.  If you wish to have the VSOCK feature  you can 
+install the driver by running vmware-config.pl again after making sure that 
+gcc, binutils, make and the kernel sources for your running kernel are 
+installed on your machine. These packages are available on your distribution's 
+installation CD.
+[ Press the Enter key to continue.] 
+
+Do you want networking for your virtual machines? (yes/no/help) [yes]    
+
+Configuring a bridged network for vmnet0.
+
+Please specify a name for this network. 
+[Bridged] 
+
+Your computer has multiple ethernet network interfaces available: eth0, 
+vboxnet0. Which one do you want to bridge to vmnet0? [eth0] vboxnet0 
+
+The following bridged networks have been defined:
+
+. vmnet0 is bridged to vboxnet0
+
+Do you wish to configure another bridged network? (yes/no) [no] 
+
+Do you want to be able to use NAT networking in your virtual machines? (yes/no)
+[yes] 
+
+Configuring a NAT network for vmnet8.
+
+Please specify a name for this network. [NAT] 
+
+Do you want this program to probe for an unused private subnet? (yes/no/help) 
+[yes] 
+
+Probing for an unused private subnet (this can take some time)...
+
+The subnet 192.168.250.0/255.255.255.0 appears to be unused.
+
+The following NAT networks have been defined:
+
+. vmnet8 is a NAT network on private subnet 192.168.250.0.
+
+Do you wish to configure another NAT network? (yes/no) [no] 
+
+Do you want to be able to use host-only networking in your virtual machines? 
+[yes] 
+
+Configuring a host-only network for vmnet1.
+
+Please specify a name for this network. 
+[HostOnly] 
+
+Do you want this program to probe for an unused private subnet? (yes/no/help) 
+[yes] help
+
+Virtual machines configured to use host-only networking are placed on a virtual
+network that is confined to this host.  Virtual machines on this network can 
+communicate with each other and the host, but no one else.
+
+To setup this host-only networking you need to select a network number that is 
+normally unreachable from the host.  We can automatically select this number 
+for you, or you can specify a network number that you want.
+
+The automatic selection process works by testing a series of Class C subnet 
+numbers to see if they are reachable from the host.  The first one that is 
+unreachable is used.  The subnet numbers are chosen from the private network 
+numbers specified by the Internet Engineering Task Force (IETF) in RFC 1918 
+(http://www.isi.edu/in-notes/rfc1918.txt).
+
+Remember that the host-only network that virtual machines reside on will not be
+accessible outside the host machine.  This means that it is OK to use the same 
+number on different systems so long as you do not enable communication between 
+these networks.
+
+Do you want this program to probe for an unused private subnet? (yes/no/help) 
+[yes] 
+
+Probing for an unused private subnet (this can take some time)...
+
+The subnet 192.168.252.0/255.255.255.0 appears to be unused.
+
+The following host-only networks have been defined:
+
+. vmnet1 is a host-only network on private subnet 192.168.252.0.
+
+Do you wish to configure another host-only network? (yes/no) [no] 
+
+None of the pre-built vmnet modules for VMware Server is suitable for your 
+running kernel.  Do you want this program to try to build the vmnet module for 
+your system (you need to have a C compiler installed on your system)? [yes] 
+
+Extracting the sources of the vmnet module.
+
+Building the vmnet module.
+
+Using 2.6.x kernel build system.
+make: Entering directory `/tmp/vmware-config1/vmnet-only'
+make -C /lib/modules/2.6.35-28-generic-pae/build/include/.. SUBDIRS=$PWD SRCROOT=$PWD/. modules
+make[1]: Entering directory `/usr/src/linux-headers-2.6.35-28-generic-pae'
+  CC [M]  /tmp/vmware-config1/vmnet-only/driver.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/hub.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/userif.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/netif.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/bridge.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/filter.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/procfs.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/smac_compat.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/smac.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/vnetEvent.o
+  CC [M]  /tmp/vmware-config1/vmnet-only/vnetUserListener.o
+  LD [M]  /tmp/vmware-config1/vmnet-only/vmnet.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /tmp/vmware-config1/vmnet-only/vmnet.mod.o
+  LD [M]  /tmp/vmware-config1/vmnet-only/vmnet.ko
+make[1]: Leaving directory `/usr/src/linux-headers-2.6.35-28-generic-pae'
+cp -f vmnet.ko ./../vmnet.o
+make: Leaving directory `/tmp/vmware-config1/vmnet-only'
+The vmnet module loads perfectly into the running kernel.
+
+Please specify a port for remote connections to use [902] 
+
+Please specify a port for standard http connections to use [8222] 
+
+Please specify a port for secure http (https) connections to use [8333] 
+
+The current administrative user for VMware Server  is ''.  Would you like to 
+specify a different administrator? [no] yes
+
+Please specify the user whom you wish to be the VMware Server administrator
+ pratikk
+
+Using pratikk as the VMware Server administrator.
+
+insserv: warning: script 'K02acpi-support' missing LSB tags and overrides
+insserv: script vmware-mgmt: service VMware already provided!
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'module-init-tools' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `module-init-tools'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `module-init-tools'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'network-interface' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `network-interface'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `network-interface'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'console-setup' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `console-setup'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `console-setup'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'apport' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `apport'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `apport'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'irqbalance' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `irqbalance'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `irqbalance'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'atd' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `atd'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `atd'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'plymouth-splash' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `plymouth-splash'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `plymouth-splash'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'ufw' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `ufw'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `ufw'
+insserv: script postgresql-8.4: service postgresql already provided!
+insserv: script postgresql-8.4: service postgresql-8.4 already provided!
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'plymouth-log' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `plymouth-log'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `plymouth-log'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'udevtrigger' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `udevtrigger'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `udevtrigger'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'hostname' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `hostname'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `hostname'
+insserv: script vmware-core: service VMware already provided!
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'network-interface-security' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `network-interface-security'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `network-interface-security'
+insserv: script vmware-autostart: service VMware already provided!
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'cron' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `cron'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `cron'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'gdm' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `gdm'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `gdm'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'hwclock-save' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `hwclock-save'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `hwclock-save'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'avahi-daemon' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `avahi-daemon'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `avahi-daemon'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'procps' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `procps'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `procps'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'plymouth-stop' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `plymouth-stop'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `plymouth-stop'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'dmesg' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `dmesg'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `dmesg'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'rsyslog' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `rsyslog'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `rsyslog'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'cups' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `cups'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `cups'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'acpid' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `acpid'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `acpid'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'hwclock' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `hwclock'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `hwclock'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'mysql' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `mysql'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `mysql'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'alsa-mixer-save' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `alsa-mixer-save'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `alsa-mixer-save'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'udevmonitor' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `udevmonitor'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `udevmonitor'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'dbus' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `dbus'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `dbus'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'failsafe-x' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `failsafe-x'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `failsafe-x'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'screen-cleanup' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `screen-cleanup'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `screen-cleanup'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'udev' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `udev'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `udev'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'network-manager' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `network-manager'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `network-manager'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'anacron' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `anacron'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `anacron'
+insserv: warning: script 'acpi-support' missing LSB tags and overrides
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'udev-finish' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `udev-finish'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `udev-finish'
+The script you are attempting to invoke has been converted to an Upstart
+job, but lsb-header is not supported for Upstart jobs.
+insserv: warning: script 'plymouth' missing LSB tags and overrides
+insserv: Default-Start undefined, assuming empty start runlevel(s) for script `plymouth'
+insserv: Default-Stop  undefined, assuming empty stop  runlevel(s) for script `plymouth'
+In which directory do you want to keep your virtual machine files? 
+[/var/lib/vmware/Virtual Machines] 
+
+The path "/var/lib/vmware/Virtual Machines" does not exist currently. This 
+program is going to create it, including needed parent directories. Is this 
+what you want? [yes] 
+
+Please enter your 20-character serial number.
+
+Type XXXXX-XXXXX-XXXXX-XXXXX or 'Enter' to cancel:  A8H29-P0Q45-081E3-40LU9
+
+Creating a new VMware VIX API installer database using the tar4 format.
+
+Installing VMware VIX API.
+
+In which directory do you want to install the VMware VIX API binary files? 
+[/usr/bin] 
+
+In which directory do you want to install the VMware VIX API library files? 
+[/usr/lib/vmware-vix/lib] 
+
+The path "/usr/lib/vmware-vix/lib" does not exist currently. This program is 
+going to create it, including needed parent directories. Is this what you want?
+[yes] 
+
+In which directory do you want to install the VMware VIX API document pages? 
+[/usr/share/doc/vmware-vix] 
+
+The path "/usr/share/doc/vmware-vix" does not exist currently. This program is 
+going to create it, including needed parent directories. Is this what you want?
+[yes] 
+
+The installation of VMware VIX API 1.6.2 build-203138 for Linux completed 
+successfully. You can decide to remove this software from your system at any 
+time by invoking the following command: "/usr/bin/vmware-uninstall-vix.pl".
+
+Enjoy,
+
+--the VMware team
+
+Starting VMware services:
+   Virtual machine monitor                                             done
+   Virtual machine communication interface                             done
+   Virtual ethernet                                                    done
+   Bridged networking on /dev/vmnet0                                   done
+   Host-only networking on /dev/vmnet1 (background)                    done
+   DHCP server on /dev/vmnet1                                          done
+   Host-only networking on /dev/vmnet8 (background)                    done
+   DHCP server on /dev/vmnet8                                          done
+   NAT service on /dev/vmnet8                                          done
+   VMware Server Authentication Daemon (background)                    done
+   Shared Memory Available                                             done
+Starting VMware management services:
+   VMware Server Host Agent (background)                               done
+   VMware Virtual Infrastructure Web Access
+Starting VMware autostart virtual machines:
+   Virtual machines                                                    done
+
+The configuration of VMware Server 2.0.2 build-203138 for Linux for this 
+running kernel completed successfully.
+
+Housekeeping...
+Thank you for using the script!
+Patch provided by: 
+	Ramon de Carvalho Valle
+	http://risesecurity.org
+Script author: 
+	Radu Cotescu
+	http://radu.cotescu.com
+
+
